@@ -139,7 +139,7 @@ function drawPieChart( pieDataSet,transitionTime){
 
 function createGraphs(){
         for(var k=0; k<nrVotes; k++){
-          data[k].submithours= (data[k].submitdate-startdate)/1000/60/60/24;
+          data[k].submitdays= (data[k].submitdate-startdate)/1000/60/60/24;
           data[k].yea=data[k].answer=='J'?1:0;
           data[k].nay=data[k].answer=='N'?1:0;
           data[k].abst=data[k].answer=='E'?1:0;
@@ -153,11 +153,11 @@ function createGraphs(){
           }
         }
         
-        bisectData = d3.bisector(function(d) { return d.submithours; }).left
+        bisectData = d3.bisector(function(d) { return d.submitdays; }).left
 
         var x = d3.scale.linear()
                  .range([0, width])
-                 .domain([0, data[nrVotes-1].submithours]);
+                 .domain([0, data[nrVotes-1].submitdays]);
 
         var y = d3.scale.linear()
                  .range([height, 0])
@@ -169,7 +169,7 @@ function createGraphs(){
                  .domain([0, 100]); 
 
 
-        var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.format(",.2f")).ticks(Math.round(data[nrVotes-1].submithours));
+        var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.format(",.2f")).ticks(Math.round(data[nrVotes-1].submitdays));
         var yAxis = d3.svg.axis().scale(y).orient("left");
         var yratioAxis = d3.svg.axis().scale(yratio).orient("right");
 
@@ -178,11 +178,11 @@ function createGraphs(){
          .entries(data);
 
         var line = d3.svg.line()
-                 .x(function(d) { return x(d.submithours); })
+                 .x(function(d) { return x(d.submitdays); })
                  .y(function(d,i) { return y(i+1); });
 
        var approvalratio = d3.svg.line()
-                 .x(function(d) { return x(d.submithours); })
+                 .x(function(d) { return x(d.submitdays); })
                  .y(function(d,i) { return yratio(100*d.cumyea/(i+1)*(nrVotes)); });
 
 
@@ -297,7 +297,7 @@ function createGraphs(){
          i = bisectData(data, x0, 1),
          d0 = data[i - 1],
          d1 = data[i],
-         d = x0 - d0.submithours > d1.submithours - x0 ? d1 : d0;
+         d = x0 - d0.submitdays > d1.submitdays - x0 ? d1 : d0;
          drawPieChart(d,0);
         }
 
